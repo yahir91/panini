@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: postgres:13.4
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgresdb:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: panini
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: postgres
+api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 4000:4000
+    expose:
+      - 4000
+    env_file:
+      - .env
+    environment:
+      - VAR-DB_HOST=db
+    depends_on:
+      - db
