@@ -27,6 +27,7 @@ export class StampService {
       if (!album) {
         throw new NotFoundException('Album not found');
       }
+      
       const randomPlayer = await this.playerRepository
         .createQueryBuilder('Players')
         .select()
