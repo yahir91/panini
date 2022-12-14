@@ -5,6 +5,7 @@ import { User } from '@/database/entities/User.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateStampDto } from './dtos/CreateStamp.dto';
 
 @Injectable()
 export class StampService {
@@ -17,10 +18,10 @@ export class StampService {
     private playerRepository: Repository<Player>,
   ) {}
 
-  async generateStamp(stampDto: any) {
+  async generateStamp(userId: number) {
     try {
       const album: Album = await this.albumRepository.findOneBy({
-        User: stampDto.UserID,
+        UserId: userId,
       });
 
       if (!album) {
@@ -32,7 +33,7 @@ export class StampService {
         .orderBy('RANDOM()')
         .getOne();
 
-      const stampCreated: Stamp = await this.stampRepository.create({
+      const stampCreated: CreateStampDto = await this.stampRepository.create({
         PlayerId: randomPlayer.Id,
         AlbumId: 1,
       });

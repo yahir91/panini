@@ -6,8 +6,11 @@ import { User } from './User.entity';
 @Entity({ name: 'Album' })
 export class Album extends BaseEntity {
   @OneToOne(() => User)
-  @JoinColumn()
+  @JoinColumn({ name: 'UserId', referencedColumnName: 'Id' })
   User: User;
+
+  @Column({ nullable: false })
+  UserId: number;
 
   @OneToMany(() => Stamp, (stamp) => stamp.Album)
   Stamps: Stamp[];

@@ -1,12 +1,20 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Render } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly configService: ConfigService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Render('index')
+  root() {
+    return {
+      title: 'Nameless - API',
+      env: this.configService.get<string>('VAR_ENV_NAME'),
+      port: this.configService.get<string>('VAR_APP_PORT'),
+      swagger: /true/i.test(
+        this.configService.get<string>('VAR_ALLOW_SWAGGER'),
+      ),
+    };
   }
 }

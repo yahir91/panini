@@ -1,6 +1,7 @@
 import { Stamp } from '@/database/entities/Stamp.entity';
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateStampDto } from './dtos/CreateStamp.dto';
 import { StampService } from './stamp.service';
 
 @Controller('stamp')
@@ -16,9 +17,9 @@ export class StampController {
     
       @Post()
       async createAddress(
-        @Body() stampDto: any,
+        @Body() userId: number,
         @Res() res,
       ): Promise<Stamp> {
-        return res.json(await this.stampService.generateStamp(stampDto));
+        return res.json(await this.stampService.generateStamp(userId));
       }
 }
