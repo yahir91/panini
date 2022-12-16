@@ -42,15 +42,18 @@ export class AlbumService {
     }
     const queryBuilder = this.stampRepository.createQueryBuilder('stamp');
 
+    console.log('hi');
     queryBuilder
-      .where("stamp.AlbumId = :id", { id: album.Id })
+      .where('stamp.AlbumId = :id', { id: album.Id })
       .leftJoinAndSelect('stamp.Player', 'Player')
       .orderBy('Player.countries', pageOptionsDto.order)
       .skip(pageOptionsDto.skip)
       .take(pageOptionsDto.take);
 
     const itemCount = await queryBuilder.getCount();
-    const { entities } = await queryBuilder.getRawAndEntities();
+    console.log(itemCount);
+    const entities = await queryBuilder.getMany();
+    console.log(entities);
 
     const pageMetaDto = new PageMetaDto({ itemCount, pageOptionsDto });
 
