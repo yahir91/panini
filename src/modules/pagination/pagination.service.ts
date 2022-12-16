@@ -1,24 +1,28 @@
+import { Album } from '@/database/entities/Album.entity';
 import { User } from '@/database/entities/User.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PageDto, PageMetaDto, PageOptionsDto } from 'src/common/dtos';
 import { Repository } from 'typeorm';
-import { UserDto } from '../dtos/user.dto';
+import { AlbumDto } from '../album/dtos/Album.dto';
+import { UserDto } from '../user/dtos/User.dto';
+import { PageMetaDto } from './dtos/page-meta.dto';
+import { PageDto } from './dtos/Page.dto';
+import { PageOptionsDto } from './dtos/PageOptions.dto';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @InjectRepository(Album)
+    private albumRepository: Repository<Album>,
   ) {}
 
   public async getUsers(
     pageOptionsDto: PageOptionsDto,
-  ): Promise<PageDto<UserDto>> {
-    const queryBuilder = this.userRepository.createQueryBuilder('user');
+  ): Promise<PageDto<Album>> {
+    const queryBuilder = this.albumRepository.createQueryBuilder('Album');
 
     queryBuilder
-      .orderBy('user.createdAt', pageOptionsDto.order)
+      .orderBy('album.createdAt', pageOptionsDto.order)
       .skip(pageOptionsDto.skip)
       .take(pageOptionsDto.take);
 
