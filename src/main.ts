@@ -25,8 +25,8 @@ async function bootstrap() {
   );
   if (/true/i.test(process.env.VAR_ALLOW_SWAGGER)) {
     const config = new DocumentBuilder()
-      .setTitle('Clean Break API')
-      .setDescription('API to Clean Break App')
+      .setTitle('Panini Api')
+      .setDescription('API to Panini')
       .setVersion('1.0')
       .addBearerAuth()
       .build();
