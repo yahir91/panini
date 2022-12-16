@@ -24,7 +24,6 @@ export class StampService {
       const album: Album = await this.albumRepository.findOneBy({
         UserId: GenerateStampDto.UserId,
       });
-      console.log(album);
       if (!album) {
         throw new NotFoundException('Album not found');
       }

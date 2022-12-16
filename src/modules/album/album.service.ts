@@ -1,12 +1,13 @@
 import { Album } from '@/database/entities/Album.entity';
 import { Player } from '@/database/entities/Player.entity';
 import { Stamp } from '@/database/entities/Stamp.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PageMetaDto } from '../pagination/dtos/page-meta.dto';
 import { PageDto } from '../pagination/dtos/Page.dto';
 import { PageOptionsDto } from '../pagination/dtos/PageOptions.dto';
+import { StampDto } from '../stamp/dtos/Stamp.dto';
 
 @Injectable()
 export class AlbumService {
@@ -29,13 +30,22 @@ export class AlbumService {
     return album;
   }
 
-  public async getUsers(
+  async getAlbum(
+    id: number,
     pageOptionsDto: PageOptionsDto,
-  ): Promise<PageDto<Album>> {
-    const queryBuilder = this.albumRepository.createQueryBuilder('Album');
+  ): Promise<PageDto<Stamp>> {
+    const album: Album = await this.albumRepository.findOneBy({
+      UserId: id,
+    });
+    if (!album) {
+      throw new NotFoundException('Album not found');
+    }
+    const queryBuilder = this.stampRepository.createQueryBuilder('stamp');
 
     queryBuilder
-      .orderBy('album.createdAt', pageOptionsDto.order)
+      .where("stamp.AlbumId = :id", { id: album.Id })
+      .leftJoinAndSelect('stamp.Player', 'Player')
+      .orderBy('Player.countries', pageOptionsDto.order)
       .skip(pageOptionsDto.skip)
       .take(pageOptionsDto.take);
 
